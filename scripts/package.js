@@ -16,8 +16,7 @@ const pkgVersionChangedMatcher = /\n\+.*version.*/;
 
 // Publicly availible link to this repository's recipe folder
 // Used for generating public icon URLs
-const repo =
-  'https://cdn.jsdelivr.net/gh/ferdium/ferdium-recipes@main/recipes/';
+const repo = 'https://api.imoolee.com/recipes/';
 
 // Helper: Compress src folder into dest file
 const compress = (src, dest) =>
@@ -51,11 +50,14 @@ const compress = (src, dest) =>
 (async () => {
   // Create paths to important files
   const repoRoot = path.join(__dirname, '..');
-  const tempFolder = path.join(repoRoot, 'temp');
   const recipesFolder = path.join(repoRoot, 'recipes');
-  const outputFolder = path.join(repoRoot, 'archives');
-  const allJson = path.join(repoRoot, 'all.json');
   const featuredFile = path.join(repoRoot, 'featured.json');
+  // 定义打包文件输出目录
+  const outputDir = path.join(repoRoot, 'output');
+  const tempFolder = path.join(outputDir, 'temp');
+  const outputFolder = path.join(outputDir, 'archives');
+  const allJson = path.join(outputDir, 'all.json');
+
   const featuredRecipes = fs.readJSONSync(featuredFile);
   let recipeList = [];
   let unsuccessful = 0;
@@ -79,7 +81,7 @@ const compress = (src, dest) =>
 
   for (const recipe of availableRecipes) {
     const recipeSrc = path.join(recipesFolder, recipe);
-    const mandatoryFiles = ['package.json', 'webview.js'];
+    const mandatoryFiles = ['package.json', 'icon.svg', 'webview.js'];
 
     // Check that each mandatory file exists
     for (const file of mandatoryFiles) {
@@ -291,9 +293,7 @@ const compress = (src, dest) =>
     }
 
     // Copy recipe to temp folder
-    fs.copySync(recipeSrc, path.join(tempFolder, config.id), {
-      filter: src => !src.endsWith('icon.svg'),
-    });
+    fs.copySync(recipeSrc, path.join(tempFolder, config.id));
 
     if (!config.defaultIcon) {
       // Check if icon.svg exists
@@ -354,7 +354,7 @@ const compress = (src, dest) =>
   });
 
   // Clean up
-  fs.removeSync(tempFolder);
+  //fs.removeSync(tempFolder);
 
   // Capture the end time
   const endTime = new Date();
