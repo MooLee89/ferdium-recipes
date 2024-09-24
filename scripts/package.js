@@ -53,7 +53,7 @@ const compress = (src, dest) =>
   const recipesFolder = path.join(repoRoot, 'recipes');
   const featuredFile = path.join(repoRoot, 'featured.json');
   // 定义打包文件输出目录
-  const outputDir = path.join(repoRoot, 'output');
+  const outputDir = path.join(repoRoot,'../', 'dist-sub-webview');
   const tempFolder = path.join(outputDir, 'temp');
   const outputFolder = path.join(outputDir, 'archives');
   const allJson = path.join(outputDir, 'all.json');
